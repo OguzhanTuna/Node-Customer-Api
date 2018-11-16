@@ -110,4 +110,20 @@ router.get('/between/:start_year/:end_year', (req, res) => {
     })
 });
 
+router.get('/', (req ,res) => {
+    const promise = Movie.aggregate([
+        {
+            $lookup: {
+                from: 'directors',
+                localField: 'director_id',
+                foreignField: 'id',
+                as: 'director'
+            }
+        },
+        {
+            $unwind: 'director'
+        }
+    ]);
+});
+
 module.exports = router;
